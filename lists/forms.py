@@ -19,3 +19,9 @@ class ItemForm(forms.models.ModelForm):
                 attrs={'placeholder': 'Enter a to-do item'}
             ),
         }
+
+
+    def save(self, for_list):
+        self.instance.list = for_list
+        return super().save()
+
