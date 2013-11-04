@@ -1,7 +1,10 @@
-from django.test import LiveServerTestCase
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 import sys
+
+from django.test import LiveServerTestCase
+
 from .server_tools import reset_database
 
 
@@ -32,7 +35,32 @@ class FunctionalTest(LiveServerTestCase):
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
+        if not self._outcomeForDoCleanups.success:
+            self.take_screenshot()
+            self.dump_html()
+
         self.browser.quit()
+        super().tearDown()
+
+
+    def _get_filename(self):
+        timestamp = datetime.now().isoformat().replace(':', '.')
+        return '{}.{}-{}'.format(
+            self.__class__.__name__, self._testMethodName, timestamp
+        )
+
+
+    def take_screenshot(self):
+        filename = 'seleniumscreenshot-{}.png'.format(self._get_filename())
+        print('screenshotting to', filename)
+        self.browser.get_screenshot_as_file(filename)
+
+
+    def dump_html(self):
+        filename = 'seleniumhtml-{}.html'.format(self._get_filename())
+        print('dumping page HTML to', filename)
+        with open(filename, 'w') as f:
+            f.write(self.browser.page_source)
 
 
     def get_item_input_box(self):
