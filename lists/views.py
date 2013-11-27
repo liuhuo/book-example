@@ -24,7 +24,7 @@ def view_list(request, list_id):
     if request.method == 'POST':
         try:
             Item.objects.create(text=request.POST['item_text'], list=list_)
-            return redirect('/lists/%d/' % (list_.id,))
+            return redirect(list_)
         except ValidationError:
             error = "You can't have an empty list item"
 
