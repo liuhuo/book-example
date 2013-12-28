@@ -1,5 +1,7 @@
-
 from .base import FunctionalTest
+
+TEST_EMAIL = 'testinggoat@yahoo.com'
+TEST_PASSWORD = 'soFNjTMqMLEtj8W4'
 
 class LoginTest(FunctionalTest):
 
