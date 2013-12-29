@@ -1,5 +1,7 @@
 var initialize = function (navigator) {
-    navigator.id.request();
+    $('#id_login').on('click', function () {
+        navigator.id.request();
+    });
 };
 
 window.Superlists = {
