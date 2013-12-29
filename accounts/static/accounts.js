@@ -5,8 +5,8 @@ var initialize = function (navigator, user, token, urls) {
 
     navigator.id.watch({
         loggedInUser: user,
-        onlogin: function () {
-            $.post(urls.login);
+        onlogin: function (assertion) {
+            $.post(urls.login, {assertion:assertion});
         }
     });
 };
