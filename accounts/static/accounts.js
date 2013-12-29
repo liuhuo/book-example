@@ -3,7 +3,9 @@ var initialize = function (navigator, user, token, urls) {
         navigator.id.request();
     });
 
-    navigator.id.watch({});
+    navigator.id.watch({
+        loggedInUser: user
+    });
 };
 
 window.Superlists = {
