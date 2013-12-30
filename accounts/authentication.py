@@ -13,7 +13,7 @@ class PersonaAuthenticationBackend(object):
             PERSONA_VERIFY_URL,
             data={'assertion': assertion, 'audience': DOMAIN}
         )
-        if response.json()['status'] == 'okay':
+        if response.ok and response.json()['status'] == 'okay':
             email = response.json()['email']
             try:
                 return self.get_user(email)
