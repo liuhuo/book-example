@@ -15,6 +15,9 @@ class AuthenticateTest(TestCase):
         self.backend = PersonaAuthenticationBackend()
         self.mock_response = mock_post.return_value
         self.mock_response.ok = True
+        self.mock_response.json.return_value = {
+            'status': 'okay', 'email': 'a@b.com'
+        }
 
     def tearDown(self):
         mock_post.reset_mock()
