@@ -47,3 +47,10 @@ class AuthenticateTest(TestCase):
         user = self.backend.authenticate('an assertion')
         self.assertEqual(user, mock_user)
 
+
+    def test_calls_get_user_with_email(self):
+        self.mock_response.json.return_value = {'status': 'okay', 'email': 'a@b.com'}
+        self.backend.get_user = Mock()
+        self.backend.authenticate('an assertion')
+        self.backend.get_user.assert_called_once_with('a@b.com')
+
