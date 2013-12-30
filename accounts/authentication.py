@@ -1,4 +1,6 @@
 import requests
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 PERSONA_VERIFY_URL = 'https://verifier.login.persona.org/verify'
 DOMAIN = 'localhost'
@@ -13,7 +15,10 @@ class PersonaAuthenticationBackend(object):
         )
         if response.json()['status'] == 'okay':
             email = response.json()['email']
-            return self.get_user(email)
+            try:
+                return self.get_user(email)
+            except User.DoesNotExist:
+                return User.objects.create(email=email)
 
 
     def get_user(self, email):
