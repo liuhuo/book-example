@@ -57,3 +57,13 @@ class AuthenticateTest(TestCase):
         self.backend.authenticate('an assertion')
         self.backend.get_user.assert_called_once_with('a@b.com')
 
+
+    def test_creates_new_user_if_required(self):
+        def raise_no_user_error(_):
+            raise User.DoesNotExist()
+        self.backend.get_user = raise_no_user_error
+        user = self.backend.authenticate('an assertion')
+        new_user = User.objects.all()[0]
+        self.assertEqual(user, new_user)
+        self.assertEqual(user.email, 'a@b.com')
+
