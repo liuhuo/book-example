@@ -67,3 +67,13 @@ class AuthenticateTest(TestCase):
         self.assertEqual(user, new_user)
         self.assertEqual(user.email, 'a@b.com')
 
+
+
+class GetUserTest(TestCase):
+
+    def test_get_user_gets_user_from_database(self):
+        actual_user = User.objects.create(email='a@b.com')
+        backend = PersonaAuthenticationBackend()
+        found_user = backend.get_user('a@b.com')
+        self.assertEqual(found_user, actual_user)
+
