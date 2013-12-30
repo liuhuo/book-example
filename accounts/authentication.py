@@ -7,11 +7,13 @@ DOMAIN = 'localhost'
 class PersonaAuthenticationBackend(object):
 
     def authenticate(self, assertion):
-        requests.post(
+        response = requests.post(
             PERSONA_VERIFY_URL,
             data={'assertion': assertion, 'audience': DOMAIN}
         )
-        return self.get_user()
+        if response.json()['status'] == 'okay':
+            email = response.json()['email']
+            return self.get_user(email)
 
 
     def get_user(self, email):
