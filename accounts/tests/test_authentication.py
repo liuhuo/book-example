@@ -1,5 +1,7 @@
 from unittest.mock import Mock, patch
 from django.test import TestCase
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from accounts.authentication import (
     PERSONA_VERIFY_URL, DOMAIN, PersonaAuthenticationBackend
@@ -36,3 +38,12 @@ class AuthenticateTest(TestCase):
         self.mock_response.json.return_value = {'status': 'not okay!'}
         user = self.backend.authenticate('an assertion')
         self.assertIsNone(user)
+
+
+    def test_finds_existing_user_with_email(self):
+        self.mock_response.json.return_value = {'status': 'okay', 'email': 'a@b.com'}
+        self.backend.get_user = Mock()
+        mock_user = self.backend.get_user.return_value
+        user = self.backend.authenticate('an assertion')
+        self.assertEqual(user, mock_user)
+
