@@ -11,3 +11,5 @@ class PersonaAuthenticationBackend(object):
             PERSONA_VERIFY_URL,
             data={'assertion': assertion, 'audience': DOMAIN}
         )
+        return self.get_user()
+
