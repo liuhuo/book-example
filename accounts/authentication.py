@@ -14,6 +14,6 @@ class PersonaAuthenticationBackend(object):
         return self.get_user()
 
 
-    def get_user(self):
+    def get_user(self, email):
         pass
 
