@@ -1,4 +1,4 @@
 from django.contrib.auth import authenticate
 
-def login():
+def login(request):
     pass
