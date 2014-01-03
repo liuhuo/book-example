@@ -23,7 +23,10 @@ class LoginTest(FunctionalTest):
 
     def wait_for_element_with_id(self, element_id):
         WebDriverWait(self.browser, timeout=30).until(
-            lambda b: b.find_element_by_id(element_id)
+            lambda b: b.find_element_by_id(element_id),
+            'Could not find element with id %s. Page text was %s' % (
+                element_id, self.browser.find_element_by_tag_name('body').text
+            )
         )
 
 
