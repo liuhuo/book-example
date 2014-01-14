@@ -1,4 +1,6 @@
-from unittest.mock import patch
+from unittest.mock import Mock, patch
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from django.test import TestCase
 
 from accounts.authentication import (
@@ -29,4 +31,11 @@ class AuthenticateTest(TestCase):
         mock_post.return_value.json.return_value = {'status': 'not okay!'}
         user = self.backend.authenticate('an assertion')
         self.assertIsNone(user)
+
+
+    def test_finds_existing_user_with_email(self, mock_post):
+        mock_post.return_value.json.return_value = {'status': 'okay', 'email': 'a@b.com'}
+        actual_user = User.objects.create(email='a@b.com')
+        found_user = self.backend.authenticate('an assertion')
+        self.assertEqual(found_user, actual_user)
 
