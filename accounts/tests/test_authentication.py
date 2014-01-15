@@ -36,6 +36,7 @@ class AuthenticateTest(TestCase):
 
     def test_finds_existing_user_with_email(self, mock_post):
         mock_post.return_value.json.return_value = {'status': 'okay', 'email': 'a@b.com'}
+        User.objects.create(email='someone@else.com')
         actual_user = User.objects.create(email='a@b.com')
         found_user = self.backend.authenticate('an assertion')
         self.assertEqual(found_user, actual_user)
