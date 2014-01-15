@@ -16,7 +16,7 @@ class PersonaAuthenticationBackend(object):
         if response.ok and response.json()['status'] == 'okay':
             email = response.json()['email']
             try:
-                return User.objects.all()[0]
+                return User.objects.get(email=email)
             except:
                 return User.objects.create(email=email)
 
