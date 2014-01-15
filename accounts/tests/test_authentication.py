@@ -56,6 +56,6 @@ class GetUserTest(TestCase):
     def test_gets_user_from_ORM_using_email(self, mock_User_get):
         backend = PersonaAuthenticationBackend()
         found_user = backend.get_user('a@b.com')
-        self.assertEqual(found_user, mockUser_get.return_value)
-        mockUser.objects.get.assert_called_once_with(email='a@b.com')
+        self.assertEqual(found_user, mock_User_get.return_value)
+        mock_User_get.assert_called_once_with(email='a@b.com')
 
