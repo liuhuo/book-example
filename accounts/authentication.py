@@ -9,9 +9,10 @@ DOMAIN = 'localhost'
 class PersonaAuthenticationBackend(object):
 
     def authenticate(self, assertion):
-        requests.post(
+        response = requests.post(
             PERSONA_VERIFY_URL,
             data={'assertion': assertion, 'audience': DOMAIN}
         )
-        return User.objects.all()[0]
+        if response.json()['status'] == 'okay':
+            return User.objects.all()[0]
 
