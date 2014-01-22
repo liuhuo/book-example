@@ -72,3 +72,17 @@ class ListPage(object):
             [item.text for item in self.get_shared_with_list()]
         ))
 
+
+    def get_item_input(self):
+        return self.test.browser.find_element_by_id('id_text')
+
+
+    def add_new_item(self, item_text):
+        current_pos = len(self.get_list_table_rows())
+        self.get_item_input().send_keys(item_text + '\n')
+        self.wait_for_new_item_in_list(item_text, current_pos + 1)
+
+
+    def get_list_owner(self):
+        return self.test.browser.find_element_by_id('id_list_owner').text
+
