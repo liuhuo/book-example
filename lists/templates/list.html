@@ -30,6 +30,7 @@
         <h3>Share this list:</h3>
         <form class="form-inline" method="POST" action="{% url 'share_list' list.id %}" >
             <input name="email" placeholder="your@friends-email.com" />
+            {% csrf_token %}
         </form>
     </div>
 
