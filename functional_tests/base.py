@@ -1,14 +1,18 @@
 from datetime import datetime
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
+import os
 import sys
 import time
-from selenium.common.exceptions import WebDriverException
 
 from django.test import LiveServerTestCase
 from .server_tools import reset_database
 
 DEFAULT_WAIT = 3
+SCREEN_DUMP_LOCATION = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), 'screendumps')
+)
 
 
 class FunctionalTest(LiveServerTestCase):
@@ -39,28 +43,36 @@ class FunctionalTest(LiveServerTestCase):
 
     def tearDown(self):
         if not self._outcomeForDoCleanups.success:
-            self.take_screenshot()
-            self.dump_html()
-
+            if not os.path.exists(SCREEN_DUMP_LOCATION):
+                os.makedirs(SCREEN_DUMP_LOCATION)
+            for ix, handle in enumerate(self.browser.window_handles):
+                self._windowid = ix
+                self.browser.switch_to_window(handle)
+                self.take_screenshot()
+                self.dump_html()
         self.browser.quit()
         super().tearDown()
 
 
     def _get_filename(self):
-        timestamp = datetime.now().isoformat().replace(':', '.')
-        return '{}.{}-{}'.format(
-            self.__class__.__name__, self._testMethodName, timestamp
+        timestamp = datetime.now().isoformat().replace(':', '.')[:19]
+        return '{folder}/{classname}.{method}-window{windowid}-{timestamp}'.format(
+            folder=SCREEN_DUMP_LOCATION,
+            classname=self.__class__.__name__,
+            method=self._testMethodName,
+            windowid=self._windowid,
+            timestamp=timestamp
         )
 
 
     def take_screenshot(self):
-        filename = 'seleniumscreenshot-{}.png'.format(self._get_filename())
+        filename = self._get_filename() + '.png'
         print('screenshotting to', filename)
         self.browser.get_screenshot_as_file(filename)
 
 
     def dump_html(self):
-        filename = 'seleniumhtml-{}.html'.format(self._get_filename())
+        filename = self._get_filename() + '.html'
         print('dumping page HTML to', filename)
         with open(filename, 'w') as f:
             f.write(self.browser.page_source)
