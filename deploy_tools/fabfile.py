@@ -20,7 +20,7 @@ def _get_latest_source(source_folder):
         run("git clone %s %s" % (REPO_URL, source_folder))
     current_commit = local("git log -n 1 --format=%H", capture=True)
     run('cd %s && git reset --hard %s' % (source_folder, current_commit))
-
+    run("git checkout chapter_07_upgrade_bootstrap_to_303")
 
 def _update_settings(source_folder, site_name):
     setting_path = source_folder + '/superlists/settings.py'
