@@ -1,8 +1,6 @@
 Django==1.6.2
 South==0.8.4
-ecdsa==0.10
 gunicorn==18.0
-paramiko==1.12.2
 psycopg2==2.5.2
 pycrypto==2.6.1
 selenium==2.40.0
