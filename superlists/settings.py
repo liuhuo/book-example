@@ -38,7 +38,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'lists',
     'south',
+    'functional_tests',
+    'accounts',
 )
+
+AUTH_USER_MODEL = 'accounts.ListUser'
+AUTHENTICATION_BACKENDS = ('accounts.authentication.PersonaAuthenticationBackend',)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -59,11 +64,14 @@ WSGI_APPLICATION = 'superlists.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, '../database/db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'liuhuodb',
+        'USER': 'postgres',
+        'PASSWORD': 'cipher',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
